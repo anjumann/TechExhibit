@@ -1,8 +1,12 @@
 
 export default function Home() {
   return (
-    <div>
-      <h1>Home</h1>
-    </div>
+   <section className=" flex-start flex-col paddings mb-16  " >
+
+      Categories
+      Posts
+      Loadmore
+      
+   </section>
   );
 }
