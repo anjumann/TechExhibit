@@ -1,8 +1,11 @@
 "use client";
 import { SessionInterface } from "@/common.types";
-import React from "react";
+import React, {useState} from "react";
 import Image from "next/image";
 import FormField from "./FormField";
+import CustomMenu from "./CustomMenu";
+import Button from "./Button";
+import { categoryFilters } from "@/constants";
 type Props = {
   type: string;
   session: SessionInterface;
@@ -11,15 +14,16 @@ type Props = {
 const ProjectForm = ({ type, session }: Props) => {
   const handleFormSubmit = (e: React.FormEvent) => {};
   const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {};
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   const handleStateChange = (fieldName: string, value: string) => {};
   const form = {
     image: "",
     title: "",
-    liveSiteUrl:'',
-    githubUrl:'',
+    liveSiteUrl: "",
+    githubUrl: "",
     description: "",
-
+    category: "",
   };
   return (
     <form onSubmit={handleFormSubmit} className="flexStart form">
@@ -81,6 +85,26 @@ const ProjectForm = ({ type, session }: Props) => {
         placeholder="https://github.com/anjumann/techexhibit"
         setState={(value) => handleStateChange("githubUrl", value)}
       />
+
+      <CustomMenu
+        title="Category"
+        state={form.category}
+        filters={categoryFilters}
+        setState={(value) => handleStateChange("category", value)}
+      />
+
+      <div className="flexStart w-full">
+        <Button
+          title={
+            submitting
+              ? `${type === "create" ? "Creating" : "Editing"}`
+              : `${type === "create" ? "Create" : "Edit"}`
+          }
+          type="submit"
+          leftIcon={submitting ? "" : "/plus.svg"}
+          submitting={submitting}
+        />
+      </div>
     </form>
   );
 };
