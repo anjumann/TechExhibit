@@ -20,6 +20,7 @@ export const categoryFilters = [
   "Blockchain",
   "E-commerce",
   "Chatbots",
+  "Other",
 ];
 
 export const footerLinks = [
