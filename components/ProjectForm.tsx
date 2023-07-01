@@ -1,19 +1,22 @@
 "use client";
-import { SessionInterface } from "@/common.types";
+import { FormState, ProjectInterface, SessionInterface } from "@/common.types";
 import React, { useState } from "react";
 import Image from "next/image";
 import FormField from "./FormField";
 import CustomMenu from "./CustomMenu";
 import Button from "./Button";
 import { categoryFilters } from "@/constants";
-import { createNewProject, fetchToken } from "@/lib/actions";
+import { createNewProject, fetchToken, updateProject } from "@/lib/actions";
 import { useRouter } from "next/navigation";
-type Props = {
-  type: string;
-  session: SessionInterface;
-};
 
-const ProjectForm = ({ type, session }: Props) => {
+type Props = {
+  type: string,
+  session: SessionInterface,
+  project?: ProjectInterface
+}
+
+
+const ProjectForm = ({ type, session, project }: Props) => {
   const router = useRouter();
 
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -28,6 +31,12 @@ const ProjectForm = ({ type, session }: Props) => {
         await createNewProject(form, session?.user?.id, token);
         router.push("/");
       }
+        
+      if (type === "edit") {
+        await updateProject(form, project?.id as string, token)
+
+        router.push("/")
+    }
     } catch (error) {
       alert(
         `Failed to ${
@@ -67,14 +76,14 @@ const ProjectForm = ({ type, session }: Props) => {
     setForm((prevForm) => ({ ...prevForm, [fieldName]: value }));
   };
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const [form, setForm] = useState({
-    image: "",
-    title: "",
-    liveSiteUrl: "",
-    githubUrl: "",
-    description: "",
-    category: "",
-  });
+  const [form, setForm] = useState<FormState>({
+    title: project?.title || "",
+    description: project?.description || "",
+    image: project?.image || "",
+    liveSiteUrl: project?.liveSiteUrl || "",
+    githubUrl: project?.githubUrl || "",
+    category: project?.category || ""
+})
 
   return (
     <form onSubmit={handleFormSubmit} className="flexStart form">
