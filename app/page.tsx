@@ -1,5 +1,6 @@
 import { ProjectInterface } from "@/common.types";
 import Categories from "@/components/Categories";
+import ProjectCard from "@/components/ProjectCard";
 import { fetchAllProjects } from "@/lib/actions";
 
 type ProjectSearch = {
@@ -31,11 +32,25 @@ const Home = async () => {
     );
   }
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <section className=" flex-start flex-col paddings mb-16  ">
-      Categories Posts Loadmore
+      Categories
+      <section className="projects-grid">
+        {projectsToDisplay.map(({ node }: { node: ProjectInterface }) => (
+          <ProjectCard
+            key={`${node?.id}`}
+            id={node?.id}
+            image={node?.image}
+            title={node?.title}
+            name={node?.createdBy.name}
+            avatarUrl={node?.createdBy.avatarUrl}
+            userId={node?.createdBy.id}
+          />
+        ))}
+      </section>
+      Loadmore
     </section>
   );
 };

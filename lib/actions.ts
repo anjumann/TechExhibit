@@ -2,6 +2,9 @@ import { ProjectForm } from "@/common.types";
 import {
   createProjectMutation,
   createUserMutation,
+  deleteProjectMutation,
+  getProjectByIdQuery,
+  getProjectsOfUserQuery,
   getUserQuery,
   projectsQuery,
 } from "@/graphql";
@@ -101,4 +104,19 @@ export const fetchAllProjects = (category?: string | null, endcursor?: string | 
   client.setHeader("x-api-key", apiKey);
 
   return makeGraphQLRequest(projectsQuery, { category, endcursor });
+};
+
+export const getProjectDetails = (id: string) => {
+  client.setHeader("x-api-key", apiKey);
+  return makeGraphQLRequest(getProjectByIdQuery, { id });
+};
+
+export const getUserProjects = (id: string, last?: number) => {
+  client.setHeader("x-api-key", apiKey);
+  return makeGraphQLRequest(getProjectsOfUserQuery, { id, last });
+};
+
+export const deleteProject = (id: string, token: string) => {
+  client.setHeader("Authorization", `Bearer ${token}`);
+  return makeGraphQLRequest(deleteProjectMutation, { id });
 };
